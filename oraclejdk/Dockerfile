@@ -4,11 +4,12 @@ MAINTAINER Ajay Saini <saini.ajay172@gmail.com>
 
 USER root
 
-ENV JAVA_VERSION=8 \
-    JAVA_UPDATE=192 \
-    JAVA_BUILD=12 \
-    JAVA_PATH=750e1c8617c5452694857ad95c3ee230 \
-    JAVA_HOME="/usr/lib/jvm/default-jvm"
+ENV JAVA_VERSION 8
+ENV JAVA_UPDATE 192
+ENV JAVA_BUILD 12
+ENV JAVA_PATH 750e1c8617c5452694857ad95c3ee230
+ENV JAVA_HOME /usr/lib/jvm/default-jvm
+ENV PATH $PATH:$JAVA_HOME/bin
 
 RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
     cd "/tmp" && \
@@ -18,7 +19,6 @@ RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip &
     mkdir -p "/usr/lib/jvm" && \
     mv "/tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}" "/usr/lib/jvm/java-${JAVA_VERSION}-oracle" && \
     ln -s "java-${JAVA_VERSION}-oracle" "$JAVA_HOME" && \
-    ln -s "$JAVA_HOME/bin/"* "/usr/bin/" && \
     rm -rf "$JAVA_HOME/"*src.zip && \
     rm -rf "$JAVA_HOME/lib/missioncontrol" \
            "$JAVA_HOME/lib/visualvm" \
