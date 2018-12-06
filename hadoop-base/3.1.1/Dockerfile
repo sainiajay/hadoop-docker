@@ -1,4 +1,4 @@
-FROM sainiajay/oraclejdk-docker
+FROM sainiajay/oraclejdk
 
 MAINTAINER Ajay Saini <saini.ajay172@gmail.com>
 

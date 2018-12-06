@@ -1,4 +1,4 @@
-FROM sainiajay/alpine-glibc-docker
+FROM sainiajay/alpine-glibc
 
 MAINTAINER Ajay Saini <saini.ajay172@gmail.com>
 
