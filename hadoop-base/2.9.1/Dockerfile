@@ -38,7 +38,8 @@ RUN wget -O hadoop.tar.gz https://archive.apache.org/dist/hadoop/common/hadoop-$
     rm hadoop.tar.gz && \
     ln -s /usr/local/hadoop-$HADOOP_VER $HADOOP_HOME && \
     mkdir $HADOOP_HOME/logs && \
-    ssh-keygen -t rsa -P "" && \
-    cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+    ssh-keygen -AP "" && \
+    cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys && \
+    /usr/sbin/sshd
 
 WORKDIR $HADOOP_HOME
