@@ -4,12 +4,12 @@ MAINTAINER Ajay Saini <saini.ajay172@gmail.com>
 
 USER root
 
-ENV JAVA_VERSION 8
-ENV JAVA_UPDATE 192
-ENV JAVA_BUILD 12
-ENV JAVA_PATH 750e1c8617c5452694857ad95c3ee230
-ENV JAVA_HOME /usr/lib/jvm/default-jvm
-ENV PATH $PATH:$JAVA_HOME/bin
+ENV JAVA_VERSION=8 \
+    JAVA_UPDATE=192 \
+    JAVA_BUILD=12 \
+    JAVA_PATH=750e1c8617c5452694857ad95c3ee230 \
+    JAVA_HOME=/usr/lib/jvm/default-jvm \
+    PATH=$PATH:$JAVA_HOME/bin
 
 RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
     cd "/tmp" && \
@@ -38,8 +38,8 @@ RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip &
            "$JAVA_HOME/jre/lib/amd64/libglass.so" \
            "$JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so" \
            "$JAVA_HOME/jre/lib/amd64/"libjavafx*.so \
-           "$JAVA_HOME/jre/lib/amd64/"libjfx*.so && \
-    rm -rf "$JAVA_HOME/jre/bin/jjs" \
+           "$JAVA_HOME/jre/lib/amd64/"libjfx*.so \
+           "$JAVA_HOME/jre/bin/jjs" \
            "$JAVA_HOME/jre/bin/keytool" \
            "$JAVA_HOME/jre/bin/orbd" \
            "$JAVA_HOME/jre/bin/pack200" \
