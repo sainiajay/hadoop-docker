@@ -3,42 +3,35 @@ FROM sainiajay/oraclejdk
 MAINTAINER Ajay Saini <saini.ajay172@gmail.com>
 
 USER root
-# Passwordless SSH
-# RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
-# RUN ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
-# RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
-# RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
-# ADD ssh_config /root/.ssh/config
-# RUN chmod 600 /root/.ssh/config
-# RUN chown root:root /root/.ssh/config
-
-# RUN echo "Port 2122" >> /etc/ssh/sshd_config
+ARG HADOOP_HOME=/usr/local/hadoop
+ARG HADOOP_VER=3.1.1
 
 # Install Hadoop
-ENV HADOOP_VER 3.1.1
-ENV HADOOP_HOME /usr/local/hadoop
-ENV PATH $PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+ENV HADOOP_HOME=$HADOOP_HOME \
+    HADOOP_COMMON_HOME=$HADOOP_HOME \
+    HADOOP_HDFS_HOME=$HADOOP_HOME \
+    HADOOP_MAPRED_HOME=$HADOOP_HOME \
+    HADOOP_YARN_HOME=$HADOOP_HOME \
+    HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop \
+    HDFS_NAMENODE_USER=root \
+    HDFS_DATANODE_USER=root \
+    HDFS_SECONDARYNAMENODE_USER=root \
+    YARN_RESOURCEMANAGER_USER=root \
+    YARN_NODEMANAGER_USER=root \
+    PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 
-ENV HDFS_NAMENODE_USER root
-ENV HDFS_DATANODE_USER root
-ENV HDFS_SECONDARYNAMENODE_USER root
-ENV YARN_RESOURCEMANAGER_USER root
-ENV YARN_NODEMANAGER_USER root
+ADD https://archive.apache.org/dist/hadoop/common/hadoop-$HADOOP_VER/hadoop-$HADOOP_VER.tar.gz /tmp
+RUN tar -xzf /tmp/hadoop-$HADOOP_VER.tar.gz -C /usr/local/ \
+&&  ln -s /usr/local/hadoop-$HADOOP_VER $HADOOP_HOME \
+&&  mkdir $HADOOP_HOME/logs \
+&&  rm -rf /tmp
 
-ENV HADOOP_COMMON_HOME $HADOOP_HOME
-ENV HADOOP_HDFS_HOME $HADOOP_HOME
-ENV HADOOP_MAPRED_HOME $HADOOP_HOME
-ENV HADOOP_YARN_HOME $HADOOP_HOME
-ENV HADOOP_CONF_DIR $HADOOP_HOME/etc/hadoop
+#Passwordless SSH
+RUN apk add --no-cache openssl openssh \
+&&  ssh-keygen -qAN "" \
+&&  ssh-keygen -qN "" -t rsa -f /root/.ssh/id_rsa \
+&&  cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys \
+&&  printf "\nStrictHostKeyChecking no\nUserKnownHostsFile /dev/null\nLogLevel QUIET\n" >> /etc/ssh/ssh_config
 
-RUN wget -O hadoop.tar.gz https://archive.apache.org/dist/hadoop/common/hadoop-$HADOOP_VER/hadoop-$HADOOP_VER.tar.gz && \
-    tar -xzf hadoop.tar.gz -C /usr/local/ && \
-    rm hadoop.tar.gz && \
-    ln -s /usr/local/hadoop-$HADOOP_VER $HADOOP_HOME && \
-    mkdir $HADOOP_HOME/logs && \
-    ssh-keygen -AP "" && \
-    cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys && \
-    /usr/sbin/sshd
-
-WORKDIR $HADOOP_HOME
+WORKDIR /home
