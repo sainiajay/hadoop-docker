@@ -5,7 +5,8 @@ MAINTAINER Ajay Saini <saini.ajay172@gmail.com>
 USER root
 
 ENV LANG=C.UTF-8 \
-    PS1 "[\u@\h:\w ] $"
+    PS1 "[\u@\h:\w ] $" \
+    HOME=/home
 
 # Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.
 RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
