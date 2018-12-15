@@ -4,11 +4,11 @@ MAINTAINER Ajay Saini <saini.ajay172@gmail.com>
 
 USER root
 
-ENV JAVA_VERSION=8 \
-    JAVA_UPDATE=192 \
-    JAVA_BUILD=12 \
-    JAVA_PATH=750e1c8617c5452694857ad95c3ee230 \
-    JAVA_HOME=/usr/lib/jvm/default-jvm \
+ARG JAVA_VERSION=8
+ARG JAVA_UPDATE=192
+ARG JAVA_BUILD=12
+ARG JAVA_PATH=750e1c8617c5452694857ad95c3ee230
+ENV JAVA_HOME=/usr/lib/jvm/default-jvm \
     PATH=$PATH:$JAVA_HOME/bin
 
 RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip && \
